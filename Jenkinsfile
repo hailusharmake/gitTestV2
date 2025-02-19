@@ -15,10 +15,10 @@ pipeline {
                  }
                  stage('Deploy to Cloudhub') { 
                    environment {
-                                 ANYPOINT_CREDENTIALS = credentials('anypointplatform')
+                                 ANYPOINT_CREDENTIALS = credentials('anypoint-platform')
                                }
                    steps {
-                            bat 'mvn deploy -DmuleDeploy -DmuleVersion=4.8.0 -Dusername=sharmakejan20 -Dpassword=Cabaye!3664 -DworkerType=MICRO -Dworkers=1 -Dregion=us-east-1'
+                            bat 'mvn deploy -DmuleDeploy -DmuleVersion=4.8.3 -Dusername=sharmakejan20 -Dpassword=Cabaye!3664 -DworkerType=MICRO -Dworkers=1 -Dregion=us-east-1'
                          }
                     }
          }
