@@ -1,31 +1,25 @@
 pipeline {
-  agent any
-  stages {
-    stage('Unit Test') { 
-      steps {
-        sh 'mvn clean test'
-      }
-    }
-    stage('Deploy Standalone') { 
-      steps {
-        sh 'mvn deploy -P standalone'
-      }
-    }
-    stage('Deploy ARM') { 
-      environment {
-        ANYPOINT_CREDENTIALS = credentials('anypoint.credentials') 
-      }
-      steps {
-        sh 'mvn deploy -P arm -Darm.target.name=local-3.9.0-ee -Danypoint.username=${ANYPOINT_CREDENTIALS_USR}  -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW}' 
-      }
-    }
-    stage('Deploy CloudHub') { 
-      environment {
-        ANYPOINT_CREDENTIALS = credentials('anypoint.credentials')
-      }
-      steps {
-        sh 'mvn deploy -P cloudhub -Dmule.version=4.8.3 -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW}' 
-      }
-    }
-  }
+     agent any
+         stages {
+             stage('Build') {
+                 steps {
+                     echo 'Application is in Building Phase'
+                     bat 'mvn clean install'
+                     }
+                 }
+             stage('Test') {
+                 steps {
+                     echo 'Application is in Testing Phase'
+                     bat 'mvn test'
+                       }
+                 }
+                 stage('Deploy to Cloudhub') { 
+                   environment {
+                                 ANYPOINT_CREDENTIALS = credentials('anypointplatform')
+                               }
+                   steps {
+                            bat 'mvn deploy -DmuleDeploy -DmuleVersion=4.8.0 -Dusername=sharmakejan20 -Dpassword=Cabaye!3664 -DworkerType=MICRO -Dworkers=1 -Dregion=us-east-1'
+                         }
+                    }
+         }
 }
